@@ -23,9 +23,9 @@ const users = [
   },
 ];
 
+// Lấy Thông Tin Có Hỗ Trợ Săp Xếp
 app.get("/users", (req, res) => {
   const { sort } = req.query || "asc";
-  console.log(sort);
 
   if (sort === "asc") {
     users.sort((a, b) => a.age - b.age);
@@ -36,6 +36,14 @@ app.get("/users", (req, res) => {
   res.send(users);
 });
 
+// Get details 
+app.get("/users/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.find((user) => user.id == id);
+  res.send(user);
+});
+
+// Update info
 app.put("/users/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const changeUser = users.find((changeUser) => changeUser.id === id);
@@ -50,16 +58,7 @@ app.put("/users/:id", (req, res) => {
   res.send(changeUser);
 });
 
-// app.get("/users/:id", (req, res) => {
-//   const id = parseInt(req.params.id);
-//   const user = users.find((user) => user.id == id);
-//   res.send(user);
-// });
-
-// app.get("/users/?:id", (res, req) => {
-//   const id
-// })
-
+// Delete thông tin
 app.delete("/users/:id", (req, res) => {
   console.log("");
   const deleteUser = users.findIndex(
@@ -69,10 +68,29 @@ app.delete("/users/:id", (req, res) => {
   res.send(users);
 });
 
+//Add user
+app.post("/users", (req, res) => {
+  const { name, age } = req.body;
+  const newUser = {
+    id: users.length ? users[users.length - 1].id + 1 : 1,
+    name,
+    age,
+  };
+
+  users.push(newUser);
+  res.send(newUser);
+});
+
+
+
+// app.get("/users/?:id", (res, req) => {
+//   const id
+// })
+
 // app.get("/", (req, res) => {
 //   res.send("hi anh Đức");
 // });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`http:locallhost${port}/users`);
 });
